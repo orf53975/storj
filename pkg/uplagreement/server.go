@@ -25,6 +25,8 @@ type DB interface {
 	CreateAgreement(context.Context, string, Agreement) error
 	// GetAgreements gets all bandwidth agreements.
 	GetAgreements(context.Context) ([]Agreement, error)
+	// GetSignature gets the public key of uplink corresponding to serial number
+	GetSignature(ctx context.Context, serialnum string) (*Agreement, error)
 	// GetAgreementsSince gets all bandwidth agreements since specific time.
 	GetAgreementsSince(context.Context, time.Time) ([]Agreement, error)
 }

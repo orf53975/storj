@@ -354,3 +354,10 @@ func (m *lockedUplinkAgreement) GetAgreementsSince(ctx context.Context, a1 time.
 	defer m.Unlock()
 	return m.db.GetAgreementsSince(ctx, a1)
 }
+
+// GetSignature gets the public key of uplink corresponding to serial number
+func (m *lockedUplinkAgreement) GetSignature(ctx context.Context, serialnum string) (*uplagreement.Agreement, error) {
+	m.Lock()
+	defer m.Unlock()
+	return m.db.GetSignature(ctx, serialnum)
+}

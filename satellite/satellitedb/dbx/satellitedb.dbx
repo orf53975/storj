@@ -205,8 +205,7 @@ delete injuredsegment ( where injuredsegment.id = ? )
 //--- uplinkagreement ---//
 
 model uplinkagreement (
-	key signature
-	unique serialnum
+	key serialnum
 
 	field signature  blob		//--uplink public key--//
 	field serialnum  text		//--uplink cheque ser num--//

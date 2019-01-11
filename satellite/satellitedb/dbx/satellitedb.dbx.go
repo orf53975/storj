@@ -343,8 +343,7 @@ CREATE TABLE uplinkagreements (
 	serialnum text NOT NULL,
 	data bytea NOT NULL,
 	created_at timestamp with time zone NOT NULL,
-	PRIMARY KEY ( signature ),
-	UNIQUE ( serialnum )
+	PRIMARY KEY ( serialnum )
 );`
 }
 
@@ -479,8 +478,7 @@ CREATE TABLE uplinkagreements (
 	serialnum TEXT NOT NULL,
 	data BLOB NOT NULL,
 	created_at TIMESTAMP NOT NULL,
-	PRIMARY KEY ( signature ),
-	UNIQUE ( serialnum )
+	PRIMARY KEY ( serialnum )
 );`
 }
 

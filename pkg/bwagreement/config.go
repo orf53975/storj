@@ -12,6 +12,7 @@ import (
 
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/provider"
+	"storj.io/storj/pkg/uplagreement"
 )
 
 var (
@@ -30,11 +31,14 @@ func (c Config) Run(ctx context.Context, server *provider.Provider) (err error) 
 
 	zap.S().Debug("Starting Bandwidth Agreement Receiver...")
 
-	db, ok := ctx.Value("masterdb").(interface{ BandwidthAgreement() DB })
+	db, ok := ctx.Value("masterdb").(interface {
+		BandwidthAgreement() DB
+		UplinkAgreement() uplagreement.DB
+	})
 	if !ok {
 		return errs.New("unable to get satellite master db instance")
 	}
-	pb.RegisterBandwidthServer(server.GRPC(), NewServer(db.BandwidthAgreement(), zap.L(), k))
+	pb.RegisterBandwidthServer(server.GRPC(), NewServer(db.BandwidthAgreement(), db.UplinkAgreement(), zap.L(), k))
 
 	return server.Run(ctx)
 }

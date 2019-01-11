@@ -31,7 +31,7 @@ func TestSameSerialNumberBandwidthAgreements(t *testing.T) {
 		   Uplink requests a PayerBandwidthAllocation from the satellite. One serial number for all storage nodes.
 		   Uplink signes 2 RenterBandwidthAllocation for both storage node. */
 		satellitePubKey, satellitePrivKey, uplinkPrivKey := generateKeys(ctx, t)
-		server := bwagreement.NewServer(db.BandwidthAgreement(), zap.NewNop(), satellitePubKey)
+		server := bwagreement.NewServer(db.BandwidthAgreement(), db.UplinkAgreement(), zap.NewNop(), satellitePubKey)
 
 		pbaFile1, err := GeneratePayerBandwidthAllocation(pb.PayerBandwidthAllocation_GET, satellitePrivKey, uplinkPrivKey, false)
 		assert.NoError(t, err)

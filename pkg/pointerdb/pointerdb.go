@@ -340,7 +340,7 @@ func (s *Server) PayerBandwidthAllocation(ctx context.Context, req *pb.PayerBand
 		return nil, err
 	}
 
-	// store the corresponding uplink's info into uplinkagreement db
+	// store the corresponding uplink's id and public key into uplinkagreement db
 	err = s.uplinkdb.CreateAgreement(ctx, serialNum.String(), uplagreement.Agreement{Agreement: pi.ID.Bytes(), Signature: pubbytes})
 	if err != nil {
 		return nil, err

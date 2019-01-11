@@ -41,6 +41,18 @@ func (b *uplinkagreement) GetAgreements(ctx context.Context) ([]uplagreement.Agr
 	return agreements, nil
 }
 
+func (b *uplinkagreement) GetSignature(ctx context.Context, serialnum string) (*uplagreement.Agreement, error) {
+	dbxInfo, err := b.db.Get_Uplinkagreement_By_Serialnum(ctx, dbx.Uplinkagreement_Serialnum(serialnum))
+	if err != nil {
+		return &uplagreement.Agreement{}, err
+	}
+
+	return &uplagreement.Agreement{
+		Agreement: dbxInfo.Data,      // Uplink ID
+		Signature: dbxInfo.Signature, // Uplink Public Key
+	}, nil
+}
+
 func (b *uplinkagreement) GetAgreementsSince(ctx context.Context, since time.Time) ([]uplagreement.Agreement, error) {
 	rows, err := b.db.All_Uplinkagreement_By_CreatedAt_Greater(ctx, dbx.Uplinkagreement_CreatedAt(since))
 	if err != nil {
