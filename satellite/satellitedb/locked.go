@@ -17,6 +17,7 @@ import (
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/statdb"
 	"storj.io/storj/pkg/storj"
+	"storj.io/storj/pkg/uplagreement"
 	"storj.io/storj/satellite"
 	"storj.io/storj/storage"
 )
@@ -86,6 +87,13 @@ func (m *locked) StatDB() statdb.DB {
 	m.Lock()
 	defer m.Unlock()
 	return &lockedStatDB{m.Locker, m.db.StatDB()}
+}
+
+// UplinkAgreement returns database for storing uplink agreements
+func (m *locked) UplinkAgreement() uplagreement.DB {
+	m.Lock()
+	defer m.Unlock()
+	return &lockedUplinkAgreement{m.Locker, m.db.UplinkAgreement()}
 }
 
 // lockedAccounting implements locking wrapper for accounting.DB
@@ -318,4 +326,31 @@ func (m *lockedStatDB) UpdateUptime(ctx context.Context, nodeID storj.NodeID, is
 	m.Lock()
 	defer m.Unlock()
 	return m.db.UpdateUptime(ctx, nodeID, isUp)
+}
+
+// lockedUplinkAgreement implements locking wrapper for uplagreement.DB
+type lockedUplinkAgreement struct {
+	sync.Locker
+	db uplagreement.DB
+}
+
+// CreateAgreement adds a new bandwidth agreement.
+func (m *lockedUplinkAgreement) CreateAgreement(ctx context.Context, a1 string, a2 uplagreement.Agreement) error {
+	m.Lock()
+	defer m.Unlock()
+	return m.db.CreateAgreement(ctx, a1, a2)
+}
+
+// GetAgreements gets all bandwidth agreements.
+func (m *lockedUplinkAgreement) GetAgreements(ctx context.Context) ([]uplagreement.Agreement, error) {
+	m.Lock()
+	defer m.Unlock()
+	return m.db.GetAgreements(ctx)
+}
+
+// GetAgreementsSince gets all bandwidth agreements since specific time.
+func (m *lockedUplinkAgreement) GetAgreementsSince(ctx context.Context, a1 time.Time) ([]uplagreement.Agreement, error) {
+	m.Lock()
+	defer m.Unlock()
+	return m.db.GetAgreementsSince(ctx, a1)
 }

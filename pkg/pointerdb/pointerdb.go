@@ -25,6 +25,7 @@ import (
 	pointerdbAuth "storj.io/storj/pkg/pointerdb/auth"
 	"storj.io/storj/pkg/provider"
 	"storj.io/storj/pkg/storage/meta"
+	"storj.io/storj/pkg/uplagreement"
 	"storj.io/storj/storage"
 )
 
@@ -36,6 +37,7 @@ var (
 // Server implements the network state RPC service
 type Server struct {
 	DB       storage.KeyValueStore
+	uplinkdb uplagreement.DB
 	logger   *zap.Logger
 	config   Config
 	cache    *overlay.Cache
@@ -43,9 +45,10 @@ type Server struct {
 }
 
 // NewServer creates instance of Server
-func NewServer(db storage.KeyValueStore, cache *overlay.Cache, logger *zap.Logger, c Config, identity *provider.FullIdentity) *Server {
+func NewServer(db storage.KeyValueStore, upldb uplagreement.DB, cache *overlay.Cache, logger *zap.Logger, c Config, identity *provider.FullIdentity) *Server {
 	return &Server{
 		DB:       db,
+		uplinkdb: upldb,
 		logger:   logger,
 		config:   c,
 		cache:    cache,
@@ -337,6 +340,12 @@ func (s *Server) PayerBandwidthAllocation(ctx context.Context, req *pb.PayerBand
 		return nil, err
 	}
 
+	// store the corresponding uplink's info into uplinkagreement db
+	err = s.uplinkdb.CreateAgreement(ctx, serialNum.String(), uplagreement.Agreement{Agreement: pi.ID.Bytes(), Signature: pubbytes})
+	if err != nil {
+		return nil, err
+	}
+
 	created := time.Now().Unix()
 
 	// convert ttl from days to seconds
@@ -350,7 +359,6 @@ func (s *Server) PayerBandwidthAllocation(ctx context.Context, req *pb.PayerBand
 		ExpirationUnixSec: created + int64(ttl),
 		Action:            req.GetAction(),
 		SerialNumber:      serialNum.String(),
-		PubKey:            pubbytes,
 	}
 
 	data, err := proto.Marshal(pbad)

@@ -125,6 +125,7 @@ func NewWithLogger(log *zap.Logger, satelliteCount, storageNodeCount, uplinkCoun
 	for _, node := range planet.Satellites {
 		pointerServer := pointerdb.NewServer(
 			teststore.New(),
+			node.UplinkDB,
 			node.Overlay,
 			node.Log.Named("pdb"),
 			pointerdb.Config{
