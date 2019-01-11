@@ -202,9 +202,9 @@ read limitoffset (
 )
 delete injuredsegment ( where injuredsegment.id = ? )
 
-//--- uplinkagreement ---//
+//--- uplinkDB ---//
 
-model uplinkagreement (
+model uplinkDB (
 	key serialnum
 
 	field signature  blob		//--uplink public key--//
@@ -213,23 +213,23 @@ model uplinkagreement (
 	field created_at timestamp ( autoinsert )
 )
 
-create uplinkagreement ( )
-delete uplinkagreement ( where uplinkagreement.serialnum = ? )
+create uplinkDB ( )
+delete uplinkDB ( where uplinkDB.serialnum = ? )
 
 read one (
-	select uplinkagreement
-	where  uplinkagreement.serialnum = ?
+	select uplinkDB
+	where  uplinkDB.serialnum = ?
 )
 
 read limitoffset (
-	select uplinkagreement
+	select uplinkDB
 )
 
 read all (
-	select uplinkagreement
+	select uplinkDB
 )
 
 read all (
-	select uplinkagreement
-	where  uplinkagreement.created_at > ?
+	select uplinkDB
+	where  uplinkDB.created_at > ?
 )

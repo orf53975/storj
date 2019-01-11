@@ -12,7 +12,7 @@ import (
 	"storj.io/storj/pkg/datarepair/irreparable"
 	"storj.io/storj/pkg/datarepair/queue"
 	"storj.io/storj/pkg/statdb"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/pkg/utils"
 	"storj.io/storj/satellite"
 	dbx "storj.io/storj/satellite/satellitedb/dbx"
@@ -61,9 +61,9 @@ func (db *DB) BandwidthAgreement() bwagreement.DB {
 	return &bandwidthagreement{db: db.db}
 }
 
-// UplinkAgreement is a getter for uplink's specific info like public key, id, etc...
-func (db *DB) UplinkAgreement() uplagreement.DB {
-	return &uplinkagreement{db: db.db}
+// UplinkDB is a getter for uplink's specific info like public key, id, etc...
+func (db *DB) UplinkDB() uplinkdb.DB {
+	return &uplinkDB{db: db.db}
 }
 
 // // PointerDB is a getter for PointerDB repository

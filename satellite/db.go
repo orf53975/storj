@@ -9,7 +9,7 @@ import (
 	"storj.io/storj/pkg/datarepair/irreparable"
 	"storj.io/storj/pkg/datarepair/queue"
 	"storj.io/storj/pkg/statdb"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/storage"
 )
 
@@ -22,8 +22,8 @@ type DB interface {
 
 	// BandwidthAgreement returns database for storing bandwidth agreements
 	BandwidthAgreement() bwagreement.DB
-	// UplinkAgreement returns database for storing uplink agreements
-	UplinkAgreement() uplagreement.DB
+	// UplinkDB returns database for storing uplink agreements
+	UplinkDB() uplinkdb.DB
 	// StatDB returns database for storing node statistics
 	StatDB() statdb.DB
 	// OverlayCache returns database for caching overlay information

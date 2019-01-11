@@ -22,7 +22,7 @@ import (
 	"storj.io/storj/pkg/statdb"
 	"storj.io/storj/pkg/storj"
 	"storj.io/storj/pkg/transport"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/pkg/utils"
 	"storj.io/storj/satellite"
 	"storj.io/storj/satellite/satellitedb"
@@ -40,7 +40,7 @@ type Node struct {
 	Kademlia  *kademlia.Kademlia
 	Discovery *discovery.Discovery
 	StatDB    statdb.DB
-	UplinkDB  uplagreement.DB
+	UplinkDB  uplinkdb.DB
 	Overlay   *overlay.Cache
 	Database  satellite.DB
 
@@ -184,7 +184,7 @@ func (node *Node) initOverlay(planet *Planet) error {
 
 	node.Kademlia = kad
 	node.StatDB = node.Database.StatDB()
-	node.UplinkDB = node.Database.UplinkAgreement()
+	node.UplinkDB = node.Database.UplinkDB()
 	node.Overlay = overlay.NewCache(teststore.New(), node.StatDB)
 	node.Discovery = discovery.NewDiscovery(node.Log.Named("discovery"), node.Overlay, node.Kademlia, node.StatDB)
 

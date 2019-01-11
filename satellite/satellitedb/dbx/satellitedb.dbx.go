@@ -338,7 +338,7 @@ CREATE TABLE overlay_cache_nodes (
 	PRIMARY KEY ( key ),
 	UNIQUE ( key )
 );
-CREATE TABLE uplinkagreements (
+CREATE TABLE uplinkDBs (
 	signature bytea NOT NULL,
 	serialnum text NOT NULL,
 	data bytea NOT NULL,
@@ -473,7 +473,7 @@ CREATE TABLE overlay_cache_nodes (
 	PRIMARY KEY ( key ),
 	UNIQUE ( key )
 );
-CREATE TABLE uplinkagreements (
+CREATE TABLE uplinkDBs (
 	signature BLOB NOT NULL,
 	serialnum TEXT NOT NULL,
 	data BLOB NOT NULL,
@@ -1398,93 +1398,93 @@ func (f OverlayCacheNode_Value_Field) value() interface{} {
 
 func (OverlayCacheNode_Value_Field) _Column() string { return "value" }
 
-type Uplinkagreement struct {
+type UplinkDB struct {
 	Signature []byte
 	Serialnum string
 	Data      []byte
 	CreatedAt time.Time
 }
 
-func (Uplinkagreement) _Table() string { return "uplinkagreements" }
+func (UplinkDB) _Table() string { return "uplinkDBs" }
 
-type Uplinkagreement_Update_Fields struct {
+type UplinkDB_Update_Fields struct {
 }
 
-type Uplinkagreement_Signature_Field struct {
+type UplinkDB_Signature_Field struct {
 	_set   bool
 	_null  bool
 	_value []byte
 }
 
-func Uplinkagreement_Signature(v []byte) Uplinkagreement_Signature_Field {
-	return Uplinkagreement_Signature_Field{_set: true, _value: v}
+func UplinkDB_Signature(v []byte) UplinkDB_Signature_Field {
+	return UplinkDB_Signature_Field{_set: true, _value: v}
 }
 
-func (f Uplinkagreement_Signature_Field) value() interface{} {
+func (f UplinkDB_Signature_Field) value() interface{} {
 	if !f._set || f._null {
 		return nil
 	}
 	return f._value
 }
 
-func (Uplinkagreement_Signature_Field) _Column() string { return "signature" }
+func (UplinkDB_Signature_Field) _Column() string { return "signature" }
 
-type Uplinkagreement_Serialnum_Field struct {
+type UplinkDB_Serialnum_Field struct {
 	_set   bool
 	_null  bool
 	_value string
 }
 
-func Uplinkagreement_Serialnum(v string) Uplinkagreement_Serialnum_Field {
-	return Uplinkagreement_Serialnum_Field{_set: true, _value: v}
+func UplinkDB_Serialnum(v string) UplinkDB_Serialnum_Field {
+	return UplinkDB_Serialnum_Field{_set: true, _value: v}
 }
 
-func (f Uplinkagreement_Serialnum_Field) value() interface{} {
+func (f UplinkDB_Serialnum_Field) value() interface{} {
 	if !f._set || f._null {
 		return nil
 	}
 	return f._value
 }
 
-func (Uplinkagreement_Serialnum_Field) _Column() string { return "serialnum" }
+func (UplinkDB_Serialnum_Field) _Column() string { return "serialnum" }
 
-type Uplinkagreement_Data_Field struct {
+type UplinkDB_Data_Field struct {
 	_set   bool
 	_null  bool
 	_value []byte
 }
 
-func Uplinkagreement_Data(v []byte) Uplinkagreement_Data_Field {
-	return Uplinkagreement_Data_Field{_set: true, _value: v}
+func UplinkDB_Data(v []byte) UplinkDB_Data_Field {
+	return UplinkDB_Data_Field{_set: true, _value: v}
 }
 
-func (f Uplinkagreement_Data_Field) value() interface{} {
+func (f UplinkDB_Data_Field) value() interface{} {
 	if !f._set || f._null {
 		return nil
 	}
 	return f._value
 }
 
-func (Uplinkagreement_Data_Field) _Column() string { return "data" }
+func (UplinkDB_Data_Field) _Column() string { return "data" }
 
-type Uplinkagreement_CreatedAt_Field struct {
+type UplinkDB_CreatedAt_Field struct {
 	_set   bool
 	_null  bool
 	_value time.Time
 }
 
-func Uplinkagreement_CreatedAt(v time.Time) Uplinkagreement_CreatedAt_Field {
-	return Uplinkagreement_CreatedAt_Field{_set: true, _value: v}
+func UplinkDB_CreatedAt(v time.Time) UplinkDB_CreatedAt_Field {
+	return UplinkDB_CreatedAt_Field{_set: true, _value: v}
 }
 
-func (f Uplinkagreement_CreatedAt_Field) value() interface{} {
+func (f UplinkDB_CreatedAt_Field) value() interface{} {
 	if !f._set || f._null {
 		return nil
 	}
 	return f._value
 }
 
-func (Uplinkagreement_CreatedAt_Field) _Column() string { return "created_at" }
+func (UplinkDB_CreatedAt_Field) _Column() string { return "created_at" }
 
 func toUTC(t time.Time) time.Time {
 	return t.UTC()
@@ -1867,29 +1867,29 @@ func (obj *postgresImpl) Create_Injuredsegment(ctx context.Context,
 
 }
 
-func (obj *postgresImpl) Create_Uplinkagreement(ctx context.Context,
-	uplinkagreement_signature Uplinkagreement_Signature_Field,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field,
-	uplinkagreement_data Uplinkagreement_Data_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (obj *postgresImpl) Create_UplinkDB(ctx context.Context,
+	uplinkDB_signature UplinkDB_Signature_Field,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field,
+	uplinkDB_data UplinkDB_Data_Field) (
+	uplinkDB *UplinkDB, err error) {
 
 	__now := obj.db.Hooks.Now().UTC()
-	__signature_val := uplinkagreement_signature.value()
-	__serialnum_val := uplinkagreement_serialnum.value()
-	__data_val := uplinkagreement_data.value()
+	__signature_val := uplinkDB_signature.value()
+	__serialnum_val := uplinkDB_serialnum.value()
+	__data_val := uplinkDB_data.value()
 	__created_at_val := __now
 
-	var __embed_stmt = __sqlbundle_Literal("INSERT INTO uplinkagreements ( signature, serialnum, data, created_at ) VALUES ( ?, ?, ?, ? ) RETURNING uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at")
+	var __embed_stmt = __sqlbundle_Literal("INSERT INTO uplinkDBs ( signature, serialnum, data, created_at ) VALUES ( ?, ?, ?, ? ) RETURNING uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at")
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __signature_val, __serialnum_val, __data_val, __created_at_val)
 
-	uplinkagreement = &Uplinkagreement{}
-	err = obj.driver.QueryRow(__stmt, __signature_val, __serialnum_val, __data_val, __created_at_val).Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+	uplinkDB = &UplinkDB{}
+	err = obj.driver.QueryRow(__stmt, __signature_val, __serialnum_val, __data_val, __created_at_val).Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 	if err != nil {
 		return nil, obj.makeErr(err)
 	}
-	return uplinkagreement, nil
+	return uplinkDB, nil
 
 }
 
@@ -2349,32 +2349,32 @@ func (obj *postgresImpl) Limited_Injuredsegment(ctx context.Context,
 
 }
 
-func (obj *postgresImpl) Get_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (obj *postgresImpl) Get_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
+	uplinkDB *UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements WHERE uplinkagreements.serialnum = ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs WHERE uplinkDBs.serialnum = ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_serialnum.value())
+	__values = append(__values, uplinkDB_serialnum.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
 
-	uplinkagreement = &Uplinkagreement{}
-	err = obj.driver.QueryRow(__stmt, __values...).Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+	uplinkDB = &UplinkDB{}
+	err = obj.driver.QueryRow(__stmt, __values...).Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 	if err != nil {
 		return nil, obj.makeErr(err)
 	}
-	return uplinkagreement, nil
+	return uplinkDB, nil
 
 }
 
-func (obj *postgresImpl) Limited_Uplinkagreement(ctx context.Context,
+func (obj *postgresImpl) Limited_UplinkDB(ctx context.Context,
 	limit int, offset int64) (
-	rows []*Uplinkagreement, err error) {
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements LIMIT ? OFFSET ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs LIMIT ? OFFSET ?")
 
 	var __values []interface{}
 	__values = append(__values)
@@ -2391,12 +2391,12 @@ func (obj *postgresImpl) Limited_Uplinkagreement(ctx context.Context,
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -2405,10 +2405,10 @@ func (obj *postgresImpl) Limited_Uplinkagreement(ctx context.Context,
 
 }
 
-func (obj *postgresImpl) All_Uplinkagreement(ctx context.Context) (
-	rows []*Uplinkagreement, err error) {
+func (obj *postgresImpl) All_UplinkDB(ctx context.Context) (
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs")
 
 	var __values []interface{}
 	__values = append(__values)
@@ -2423,12 +2423,12 @@ func (obj *postgresImpl) All_Uplinkagreement(ctx context.Context) (
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -2437,14 +2437,14 @@ func (obj *postgresImpl) All_Uplinkagreement(ctx context.Context) (
 
 }
 
-func (obj *postgresImpl) All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Context,
-	uplinkagreement_created_at_greater Uplinkagreement_CreatedAt_Field) (
-	rows []*Uplinkagreement, err error) {
+func (obj *postgresImpl) All_UplinkDB_By_CreatedAt_Greater(ctx context.Context,
+	uplinkDB_created_at_greater UplinkDB_CreatedAt_Field) (
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements WHERE uplinkagreements.created_at > ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs WHERE uplinkDBs.created_at > ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_created_at_greater.value())
+	__values = append(__values, uplinkDB_created_at_greater.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
@@ -2456,12 +2456,12 @@ func (obj *postgresImpl) All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Co
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -2951,14 +2951,14 @@ func (obj *postgresImpl) Delete_Injuredsegment_By_Id(ctx context.Context,
 
 }
 
-func (obj *postgresImpl) Delete_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
+func (obj *postgresImpl) Delete_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
 	deleted bool, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("DELETE FROM uplinkagreements WHERE uplinkagreements.serialnum = ?")
+	var __embed_stmt = __sqlbundle_Literal("DELETE FROM uplinkDBs WHERE uplinkDBs.serialnum = ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_serialnum.value())
+	__values = append(__values, uplinkDB_serialnum.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
@@ -2990,7 +2990,7 @@ func (impl postgresImpl) isConstraintError(err error) (
 func (obj *postgresImpl) deleteAll(ctx context.Context) (count int64, err error) {
 	var __res sql.Result
 	var __count int64
-	__res, err = obj.driver.Exec("DELETE FROM uplinkagreements;")
+	__res, err = obj.driver.Exec("DELETE FROM uplinkDBs;")
 	if err != nil {
 		return 0, obj.makeErr(err)
 	}
@@ -3318,19 +3318,19 @@ func (obj *sqlite3Impl) Create_Injuredsegment(ctx context.Context,
 
 }
 
-func (obj *sqlite3Impl) Create_Uplinkagreement(ctx context.Context,
-	uplinkagreement_signature Uplinkagreement_Signature_Field,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field,
-	uplinkagreement_data Uplinkagreement_Data_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (obj *sqlite3Impl) Create_UplinkDB(ctx context.Context,
+	uplinkDB_signature UplinkDB_Signature_Field,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field,
+	uplinkDB_data UplinkDB_Data_Field) (
+	uplinkDB *UplinkDB, err error) {
 
 	__now := obj.db.Hooks.Now().UTC()
-	__signature_val := uplinkagreement_signature.value()
-	__serialnum_val := uplinkagreement_serialnum.value()
-	__data_val := uplinkagreement_data.value()
+	__signature_val := uplinkDB_signature.value()
+	__serialnum_val := uplinkDB_serialnum.value()
+	__data_val := uplinkDB_data.value()
 	__created_at_val := __now
 
-	var __embed_stmt = __sqlbundle_Literal("INSERT INTO uplinkagreements ( signature, serialnum, data, created_at ) VALUES ( ?, ?, ?, ? )")
+	var __embed_stmt = __sqlbundle_Literal("INSERT INTO uplinkDBs ( signature, serialnum, data, created_at ) VALUES ( ?, ?, ?, ? )")
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __signature_val, __serialnum_val, __data_val, __created_at_val)
@@ -3343,7 +3343,7 @@ func (obj *sqlite3Impl) Create_Uplinkagreement(ctx context.Context,
 	if err != nil {
 		return nil, obj.makeErr(err)
 	}
-	return obj.getLastUplinkagreement(ctx, __pk)
+	return obj.getLastUplinkDB(ctx, __pk)
 
 }
 
@@ -3803,32 +3803,32 @@ func (obj *sqlite3Impl) Limited_Injuredsegment(ctx context.Context,
 
 }
 
-func (obj *sqlite3Impl) Get_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (obj *sqlite3Impl) Get_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
+	uplinkDB *UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements WHERE uplinkagreements.serialnum = ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs WHERE uplinkDBs.serialnum = ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_serialnum.value())
+	__values = append(__values, uplinkDB_serialnum.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
 
-	uplinkagreement = &Uplinkagreement{}
-	err = obj.driver.QueryRow(__stmt, __values...).Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+	uplinkDB = &UplinkDB{}
+	err = obj.driver.QueryRow(__stmt, __values...).Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 	if err != nil {
 		return nil, obj.makeErr(err)
 	}
-	return uplinkagreement, nil
+	return uplinkDB, nil
 
 }
 
-func (obj *sqlite3Impl) Limited_Uplinkagreement(ctx context.Context,
+func (obj *sqlite3Impl) Limited_UplinkDB(ctx context.Context,
 	limit int, offset int64) (
-	rows []*Uplinkagreement, err error) {
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements LIMIT ? OFFSET ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs LIMIT ? OFFSET ?")
 
 	var __values []interface{}
 	__values = append(__values)
@@ -3845,12 +3845,12 @@ func (obj *sqlite3Impl) Limited_Uplinkagreement(ctx context.Context,
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -3859,10 +3859,10 @@ func (obj *sqlite3Impl) Limited_Uplinkagreement(ctx context.Context,
 
 }
 
-func (obj *sqlite3Impl) All_Uplinkagreement(ctx context.Context) (
-	rows []*Uplinkagreement, err error) {
+func (obj *sqlite3Impl) All_UplinkDB(ctx context.Context) (
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs")
 
 	var __values []interface{}
 	__values = append(__values)
@@ -3877,12 +3877,12 @@ func (obj *sqlite3Impl) All_Uplinkagreement(ctx context.Context) (
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -3891,14 +3891,14 @@ func (obj *sqlite3Impl) All_Uplinkagreement(ctx context.Context) (
 
 }
 
-func (obj *sqlite3Impl) All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Context,
-	uplinkagreement_created_at_greater Uplinkagreement_CreatedAt_Field) (
-	rows []*Uplinkagreement, err error) {
+func (obj *sqlite3Impl) All_UplinkDB_By_CreatedAt_Greater(ctx context.Context,
+	uplinkDB_created_at_greater UplinkDB_CreatedAt_Field) (
+	rows []*UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements WHERE uplinkagreements.created_at > ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs WHERE uplinkDBs.created_at > ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_created_at_greater.value())
+	__values = append(__values, uplinkDB_created_at_greater.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
@@ -3910,12 +3910,12 @@ func (obj *sqlite3Impl) All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Con
 	defer __rows.Close()
 
 	for __rows.Next() {
-		uplinkagreement := &Uplinkagreement{}
-		err = __rows.Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+		uplinkDB := &UplinkDB{}
+		err = __rows.Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 		if err != nil {
 			return nil, obj.makeErr(err)
 		}
-		rows = append(rows, uplinkagreement)
+		rows = append(rows, uplinkDB)
 	}
 	if err := __rows.Err(); err != nil {
 		return nil, obj.makeErr(err)
@@ -4465,14 +4465,14 @@ func (obj *sqlite3Impl) Delete_Injuredsegment_By_Id(ctx context.Context,
 
 }
 
-func (obj *sqlite3Impl) Delete_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
+func (obj *sqlite3Impl) Delete_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
 	deleted bool, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("DELETE FROM uplinkagreements WHERE uplinkagreements.serialnum = ?")
+	var __embed_stmt = __sqlbundle_Literal("DELETE FROM uplinkDBs WHERE uplinkDBs.serialnum = ?")
 
 	var __values []interface{}
-	__values = append(__values, uplinkagreement_serialnum.value())
+	__values = append(__values, uplinkDB_serialnum.value())
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, __values...)
@@ -4635,21 +4635,21 @@ func (obj *sqlite3Impl) getLastInjuredsegment(ctx context.Context,
 
 }
 
-func (obj *sqlite3Impl) getLastUplinkagreement(ctx context.Context,
+func (obj *sqlite3Impl) getLastUplinkDB(ctx context.Context,
 	pk int64) (
-	uplinkagreement *Uplinkagreement, err error) {
+	uplinkDB *UplinkDB, err error) {
 
-	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkagreements.signature, uplinkagreements.serialnum, uplinkagreements.data, uplinkagreements.created_at FROM uplinkagreements WHERE _rowid_ = ?")
+	var __embed_stmt = __sqlbundle_Literal("SELECT uplinkDBs.signature, uplinkDBs.serialnum, uplinkDBs.data, uplinkDBs.created_at FROM uplinkDBs WHERE _rowid_ = ?")
 
 	var __stmt = __sqlbundle_Render(obj.dialect, __embed_stmt)
 	obj.logStmt(__stmt, pk)
 
-	uplinkagreement = &Uplinkagreement{}
-	err = obj.driver.QueryRow(__stmt, pk).Scan(&uplinkagreement.Signature, &uplinkagreement.Serialnum, &uplinkagreement.Data, &uplinkagreement.CreatedAt)
+	uplinkDB = &UplinkDB{}
+	err = obj.driver.QueryRow(__stmt, pk).Scan(&uplinkDB.Signature, &uplinkDB.Serialnum, &uplinkDB.Data, &uplinkDB.CreatedAt)
 	if err != nil {
 		return nil, obj.makeErr(err)
 	}
-	return uplinkagreement, nil
+	return uplinkDB, nil
 
 }
 
@@ -4671,7 +4671,7 @@ func (impl sqlite3Impl) isConstraintError(err error) (
 func (obj *sqlite3Impl) deleteAll(ctx context.Context) (count int64, err error) {
 	var __res sql.Result
 	var __count int64
-	__res, err = obj.driver.Exec("DELETE FROM uplinkagreements;")
+	__res, err = obj.driver.Exec("DELETE FROM uplinkDBs;")
 	if err != nil {
 		return 0, obj.makeErr(err)
 	}
@@ -4847,23 +4847,23 @@ func (rx *Rx) All_Bwagreement_By_CreatedAt_Greater(ctx context.Context,
 	return tx.All_Bwagreement_By_CreatedAt_Greater(ctx, bwagreement_created_at_greater)
 }
 
-func (rx *Rx) All_Uplinkagreement(ctx context.Context) (
-	rows []*Uplinkagreement, err error) {
+func (rx *Rx) All_UplinkDB(ctx context.Context) (
+	rows []*UplinkDB, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.All_Uplinkagreement(ctx)
+	return tx.All_UplinkDB(ctx)
 }
 
-func (rx *Rx) All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Context,
-	uplinkagreement_created_at_greater Uplinkagreement_CreatedAt_Field) (
-	rows []*Uplinkagreement, err error) {
+func (rx *Rx) All_UplinkDB_By_CreatedAt_Greater(ctx context.Context,
+	uplinkDB_created_at_greater UplinkDB_CreatedAt_Field) (
+	rows []*UplinkDB, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.All_Uplinkagreement_By_CreatedAt_Greater(ctx, uplinkagreement_created_at_greater)
+	return tx.All_UplinkDB_By_CreatedAt_Greater(ctx, uplinkDB_created_at_greater)
 }
 
 func (rx *Rx) Create_AccountingRaw(ctx context.Context,
@@ -4975,16 +4975,16 @@ func (rx *Rx) Create_OverlayCacheNode(ctx context.Context,
 
 }
 
-func (rx *Rx) Create_Uplinkagreement(ctx context.Context,
-	uplinkagreement_signature Uplinkagreement_Signature_Field,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field,
-	uplinkagreement_data Uplinkagreement_Data_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (rx *Rx) Create_UplinkDB(ctx context.Context,
+	uplinkDB_signature UplinkDB_Signature_Field,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field,
+	uplinkDB_data UplinkDB_Data_Field) (
+	uplinkDB *UplinkDB, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.Create_Uplinkagreement(ctx, uplinkagreement_signature, uplinkagreement_serialnum, uplinkagreement_data)
+	return tx.Create_UplinkDB(ctx, uplinkDB_signature, uplinkDB_serialnum, uplinkDB_data)
 
 }
 
@@ -5069,14 +5069,14 @@ func (rx *Rx) Delete_OverlayCacheNode_By_Key(ctx context.Context,
 	return tx.Delete_OverlayCacheNode_By_Key(ctx, overlay_cache_node_key)
 }
 
-func (rx *Rx) Delete_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
+func (rx *Rx) Delete_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
 	deleted bool, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.Delete_Uplinkagreement_By_Serialnum(ctx, uplinkagreement_serialnum)
+	return tx.Delete_UplinkDB_By_Serialnum(ctx, uplinkDB_serialnum)
 }
 
 func (rx *Rx) Find_AccountingTimestamps_Value_By_Name(ctx context.Context,
@@ -5158,14 +5158,14 @@ func (rx *Rx) Get_OverlayCacheNode_By_Key(ctx context.Context,
 	return tx.Get_OverlayCacheNode_By_Key(ctx, overlay_cache_node_key)
 }
 
-func (rx *Rx) Get_Uplinkagreement_By_Serialnum(ctx context.Context,
-	uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
-	uplinkagreement *Uplinkagreement, err error) {
+func (rx *Rx) Get_UplinkDB_By_Serialnum(ctx context.Context,
+	uplinkDB_serialnum UplinkDB_Serialnum_Field) (
+	uplinkDB *UplinkDB, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.Get_Uplinkagreement_By_Serialnum(ctx, uplinkagreement_serialnum)
+	return tx.Get_UplinkDB_By_Serialnum(ctx, uplinkDB_serialnum)
 }
 
 func (rx *Rx) Limited_Bwagreement(ctx context.Context,
@@ -5209,14 +5209,14 @@ func (rx *Rx) Limited_OverlayCacheNode_By_Key_GreaterOrEqual(ctx context.Context
 	return tx.Limited_OverlayCacheNode_By_Key_GreaterOrEqual(ctx, overlay_cache_node_key_greater_or_equal, limit, offset)
 }
 
-func (rx *Rx) Limited_Uplinkagreement(ctx context.Context,
+func (rx *Rx) Limited_UplinkDB(ctx context.Context,
 	limit int, offset int64) (
-	rows []*Uplinkagreement, err error) {
+	rows []*UplinkDB, err error) {
 	var tx *Tx
 	if tx, err = rx.getTx(ctx); err != nil {
 		return
 	}
-	return tx.Limited_Uplinkagreement(ctx, limit, offset)
+	return tx.Limited_UplinkDB(ctx, limit, offset)
 }
 
 func (rx *Rx) Update_AccountingRaw_By_Id(ctx context.Context,
@@ -5301,12 +5301,12 @@ type Methods interface {
 		bwagreement_created_at_greater Bwagreement_CreatedAt_Field) (
 		rows []*Bwagreement, err error)
 
-	All_Uplinkagreement(ctx context.Context) (
-		rows []*Uplinkagreement, err error)
+	All_UplinkDB(ctx context.Context) (
+		rows []*UplinkDB, err error)
 
-	All_Uplinkagreement_By_CreatedAt_Greater(ctx context.Context,
-		uplinkagreement_created_at_greater Uplinkagreement_CreatedAt_Field) (
-		rows []*Uplinkagreement, err error)
+	All_UplinkDB_By_CreatedAt_Greater(ctx context.Context,
+		uplinkDB_created_at_greater UplinkDB_CreatedAt_Field) (
+		rows []*UplinkDB, err error)
 
 	Create_AccountingRaw(ctx context.Context,
 		accounting_raw_node_id AccountingRaw_NodeId_Field,
@@ -5361,11 +5361,11 @@ type Methods interface {
 		overlay_cache_node_value OverlayCacheNode_Value_Field) (
 		overlay_cache_node *OverlayCacheNode, err error)
 
-	Create_Uplinkagreement(ctx context.Context,
-		uplinkagreement_signature Uplinkagreement_Signature_Field,
-		uplinkagreement_serialnum Uplinkagreement_Serialnum_Field,
-		uplinkagreement_data Uplinkagreement_Data_Field) (
-		uplinkagreement *Uplinkagreement, err error)
+	Create_UplinkDB(ctx context.Context,
+		uplinkDB_signature UplinkDB_Signature_Field,
+		uplinkDB_serialnum UplinkDB_Serialnum_Field,
+		uplinkDB_data UplinkDB_Data_Field) (
+		uplinkDB *UplinkDB, err error)
 
 	Delete_AccountingRaw_By_Id(ctx context.Context,
 		accounting_raw_id AccountingRaw_Id_Field) (
@@ -5399,8 +5399,8 @@ type Methods interface {
 		overlay_cache_node_key OverlayCacheNode_Key_Field) (
 		deleted bool, err error)
 
-	Delete_Uplinkagreement_By_Serialnum(ctx context.Context,
-		uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
+	Delete_UplinkDB_By_Serialnum(ctx context.Context,
+		uplinkDB_serialnum UplinkDB_Serialnum_Field) (
 		deleted bool, err error)
 
 	Find_AccountingTimestamps_Value_By_Name(ctx context.Context,
@@ -5434,9 +5434,9 @@ type Methods interface {
 		overlay_cache_node_key OverlayCacheNode_Key_Field) (
 		overlay_cache_node *OverlayCacheNode, err error)
 
-	Get_Uplinkagreement_By_Serialnum(ctx context.Context,
-		uplinkagreement_serialnum Uplinkagreement_Serialnum_Field) (
-		uplinkagreement *Uplinkagreement, err error)
+	Get_UplinkDB_By_Serialnum(ctx context.Context,
+		uplinkDB_serialnum UplinkDB_Serialnum_Field) (
+		uplinkDB *UplinkDB, err error)
 
 	Limited_Bwagreement(ctx context.Context,
 		limit int, offset int64) (
@@ -5455,9 +5455,9 @@ type Methods interface {
 		limit int, offset int64) (
 		rows []*OverlayCacheNode, err error)
 
-	Limited_Uplinkagreement(ctx context.Context,
+	Limited_UplinkDB(ctx context.Context,
 		limit int, offset int64) (
-		rows []*Uplinkagreement, err error)
+		rows []*UplinkDB, err error)
 
 	Update_AccountingRaw_By_Id(ctx context.Context,
 		accounting_raw_id AccountingRaw_Id_Field,

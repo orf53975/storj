@@ -25,7 +25,7 @@ import (
 	pointerdbAuth "storj.io/storj/pkg/pointerdb/auth"
 	"storj.io/storj/pkg/provider"
 	"storj.io/storj/pkg/storage/meta"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/storage"
 )
 
@@ -37,7 +37,7 @@ var (
 // Server implements the network state RPC service
 type Server struct {
 	DB       storage.KeyValueStore
-	uplinkdb uplagreement.DB
+	uplinkdb uplinkdb.DB
 	logger   *zap.Logger
 	config   Config
 	cache    *overlay.Cache
@@ -45,7 +45,7 @@ type Server struct {
 }
 
 // NewServer creates instance of Server
-func NewServer(db storage.KeyValueStore, upldb uplagreement.DB, cache *overlay.Cache, logger *zap.Logger, c Config, identity *provider.FullIdentity) *Server {
+func NewServer(db storage.KeyValueStore, upldb uplinkdb.DB, cache *overlay.Cache, logger *zap.Logger, c Config, identity *provider.FullIdentity) *Server {
 	return &Server{
 		DB:       db,
 		uplinkdb: upldb,
@@ -340,8 +340,8 @@ func (s *Server) PayerBandwidthAllocation(ctx context.Context, req *pb.PayerBand
 		return nil, err
 	}
 
-	// store the corresponding uplink's id and public key into uplinkagreement db
-	err = s.uplinkdb.CreateAgreement(ctx, serialNum.String(), uplagreement.Agreement{Agreement: pi.ID.Bytes(), Signature: pubbytes})
+	// store the corresponding uplink's id and public key into uplinkDB db
+	err = s.uplinkdb.CreateAgreement(ctx, serialNum.String(), uplinkdb.Agreement{Agreement: pi.ID.Bytes(), Signature: pubbytes})
 	if err != nil {
 		return nil, err
 	}

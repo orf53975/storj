@@ -11,7 +11,7 @@ import (
 	"storj.io/storj/pkg/overlay"
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/provider"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/pkg/utils"
 	"storj.io/storj/storage"
 	"storj.io/storj/storage/boltdb"
@@ -64,12 +64,12 @@ func (c Config) Run(ctx context.Context, server *provider.Provider) error {
 	cache := overlay.LoadFromContext(ctx)
 	dblogged := storelogger.New(zap.L().Named("pdb"), db)
 	uplinkdb, ok := ctx.Value("masterdb").(interface {
-		UplinkAgreement() uplagreement.DB
+		UplinkDB() uplinkdb.DB
 	})
 	if !ok {
 		return Error.New("unable to get master db instance")
 	}
-	s := NewServer(dblogged, uplinkdb.UplinkAgreement(), cache, zap.L(), c, server.Identity())
+	s := NewServer(dblogged, uplinkdb.UplinkDB(), cache, zap.L(), c, server.Identity())
 	pb.RegisterPointerDBServer(server.GRPC(), s)
 	// add the server to the context
 	ctx = context.WithValue(ctx, ctxKey, s)

@@ -16,7 +16,7 @@ import (
 
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/peertls"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 )
 
 // DB stores bandwidth agreements.
@@ -32,7 +32,7 @@ type DB interface {
 // Server is an implementation of the pb.BandwidthServer interface
 type Server struct {
 	db       DB
-	uplinkdb uplagreement.DB
+	uplinkdb uplinkdb.DB
 	pkey     crypto.PublicKey
 	logger   *zap.Logger
 }
@@ -46,7 +46,7 @@ type Agreement struct {
 }
 
 // NewServer creates instance of Server
-func NewServer(db DB, upldb uplagreement.DB, logger *zap.Logger, pkey crypto.PublicKey) *Server {
+func NewServer(db DB, upldb uplinkdb.DB, logger *zap.Logger, pkey crypto.PublicKey) *Server {
 	return &Server{
 		db:       db,
 		uplinkdb: upldb,

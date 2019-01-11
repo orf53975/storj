@@ -1,7 +1,7 @@
 // Copyright (C) 2018 Storj Labs, Inc.
 // See LICENSE for copying information.
 
-package uplagreement
+package uplinkdb
 
 import (
 	"context"
@@ -10,9 +10,6 @@ import (
 
 	"go.uber.org/zap"
 	monkit "gopkg.in/spacemonkeygo/monkit.v2"
-
-	"storj.io/storj/pkg/pb"
-	"storj.io/storj/pkg/storj"
 )
 
 var (
@@ -52,30 +49,4 @@ func NewServer(db DB, logger *zap.Logger, pkey crypto.PublicKey) *Server {
 		logger: logger,
 		pkey:   pkey,
 	}
-}
-
-// UplinkAgreements receives and stores bandwidth agreements from storage nodes
-func (s *Server) UplinkAgreements(ctx context.Context, serialNum string, PubKey []byte, uplinkid storj.NodeID) (reply *pb.AgreementsSummary, err error) {
-	defer mon.Task()(&ctx)(&err)
-
-	s.logger.Debug("Received Agreement...")
-
-	reply = &pb.AgreementsSummary{
-		Status: pb.AgreementsSummary_FAIL,
-	}
-
-	err = s.db.CreateAgreement(ctx, serialNum, Agreement{
-		Signature: PubKey,
-		Agreement: uplinkid.Bytes(),
-	})
-
-	if err != nil {
-		return reply, UplinkAgreementError.New("SerialNumber already exist in the PayerBandwidthAllocation")
-	}
-
-	reply.Status = pb.AgreementsSummary_OK
-
-	s.logger.Debug("Stored Agreement...")
-
-	return reply, nil
 }

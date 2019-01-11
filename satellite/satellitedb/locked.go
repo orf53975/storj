@@ -17,7 +17,7 @@ import (
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/statdb"
 	"storj.io/storj/pkg/storj"
-	"storj.io/storj/pkg/uplagreement"
+	"storj.io/storj/pkg/uplinkdb"
 	"storj.io/storj/satellite"
 	"storj.io/storj/storage"
 )
@@ -89,11 +89,11 @@ func (m *locked) StatDB() statdb.DB {
 	return &lockedStatDB{m.Locker, m.db.StatDB()}
 }
 
-// UplinkAgreement returns database for storing uplink agreements
-func (m *locked) UplinkAgreement() uplagreement.DB {
+// UplinkDB returns database for storing uplink agreements
+func (m *locked) UplinkDB() uplinkdb.DB {
 	m.Lock()
 	defer m.Unlock()
-	return &lockedUplinkAgreement{m.Locker, m.db.UplinkAgreement()}
+	return &lockedUplinkAgreement{m.Locker, m.db.UplinkDB()}
 }
 
 // lockedAccounting implements locking wrapper for accounting.DB
@@ -328,35 +328,35 @@ func (m *lockedStatDB) UpdateUptime(ctx context.Context, nodeID storj.NodeID, is
 	return m.db.UpdateUptime(ctx, nodeID, isUp)
 }
 
-// lockedUplinkAgreement implements locking wrapper for uplagreement.DB
+// lockedUplinkAgreement implements locking wrapper for uplinkdb.DB
 type lockedUplinkAgreement struct {
 	sync.Locker
-	db uplagreement.DB
+	db uplinkdb.DB
 }
 
 // CreateAgreement adds a new bandwidth agreement.
-func (m *lockedUplinkAgreement) CreateAgreement(ctx context.Context, a1 string, a2 uplagreement.Agreement) error {
+func (m *lockedUplinkAgreement) CreateAgreement(ctx context.Context, a1 string, a2 uplinkdb.Agreement) error {
 	m.Lock()
 	defer m.Unlock()
 	return m.db.CreateAgreement(ctx, a1, a2)
 }
 
 // GetAgreements gets all bandwidth agreements.
-func (m *lockedUplinkAgreement) GetAgreements(ctx context.Context) ([]uplagreement.Agreement, error) {
+func (m *lockedUplinkAgreement) GetAgreements(ctx context.Context) ([]uplinkdb.Agreement, error) {
 	m.Lock()
 	defer m.Unlock()
 	return m.db.GetAgreements(ctx)
 }
 
 // GetAgreementsSince gets all bandwidth agreements since specific time.
-func (m *lockedUplinkAgreement) GetAgreementsSince(ctx context.Context, a1 time.Time) ([]uplagreement.Agreement, error) {
+func (m *lockedUplinkAgreement) GetAgreementsSince(ctx context.Context, a1 time.Time) ([]uplinkdb.Agreement, error) {
 	m.Lock()
 	defer m.Unlock()
 	return m.db.GetAgreementsSince(ctx, a1)
 }
 
 // GetSignature gets the public key of uplink corresponding to serial number
-func (m *lockedUplinkAgreement) GetSignature(ctx context.Context, serialnum string) (*uplagreement.Agreement, error) {
+func (m *lockedUplinkAgreement) GetSignature(ctx context.Context, serialnum string) (*uplinkdb.Agreement, error) {
 	m.Lock()
 	defer m.Unlock()
 	return m.db.GetSignature(ctx, serialnum)
