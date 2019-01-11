@@ -91,6 +91,7 @@ func (server *Server) FindStorageNodes(ctx context.Context, req *pb.FindStorageN
 	var allReputableNodes []*pb.Node
 
 	for {
+		fmt.Println("getting reputable nodes")
 		reputableNodes, reputableStartID, err := server.getReputableNodes(ctx, reputableStartID, requiredReputableNodes, restrictions, excluded)
 		if err != nil {
 			return nil, Error.Wrap(err)
@@ -106,11 +107,16 @@ func (server *Server) FindStorageNodes(ctx context.Context, req *pb.FindStorageN
 	}
 
 	for {
+		fmt.Println("getting new nodes")
+		fmt.Println("length of all new nodes", len(allNewNodes))
 		newNodes, newStartID, err := server.getNewNodes(ctx, newStartID, requiredNewNodes, restrictions, excluded)
 		if err != nil {
 			return nil, Error.Wrap(err)
 		}
+		fmt.Println("length new nodes", len(newNodes))
+
 		newNodes, excluded, usedAddrs = server.filterNodes(ctx, newNodes, requiredNewNodes, usedAddrs, excluded)
+		fmt.Println("length new nodes after filter", len(newNodes))
 
 		allNewNodes = append(allNewNodes, newNodes...)
 
@@ -118,6 +124,7 @@ func (server *Server) FindStorageNodes(ctx context.Context, req *pb.FindStorageN
 		if newStartID == (storj.NodeID{}) || int64(len(allNewNodes)) >= requiredNewNodes {
 			break
 		}
+		break
 	}
 
 	var result []*pb.Node
@@ -150,6 +157,8 @@ func (server *Server) filterNodes(ctx context.Context, nodes []*pb.Node, nodeReq
 
 	for _, n := range nodes {
 		addr := n.Address.GetAddress()
+		fmt.Println("in filterNodes address:", addr)
+		fmt.Println(n.Id.String())
 		excluded = append(excluded, n.Id) // exclude all nodes on next iteration
 		updatedExcluded = excluded
 		if !usedAddrs[addr] {
