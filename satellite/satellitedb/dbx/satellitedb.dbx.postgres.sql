@@ -65,3 +65,11 @@ CREATE TABLE overlay_cache_nodes (
 	PRIMARY KEY ( key ),
 	UNIQUE ( key )
 );
+CREATE TABLE uplinkagreements (
+	signature bytea NOT NULL,
+	serialnum text NOT NULL,
+	data bytea NOT NULL,
+	created_at timestamp with time zone NOT NULL,
+	PRIMARY KEY ( signature ),
+	UNIQUE ( serialnum )
+);
