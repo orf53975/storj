@@ -9,11 +9,6 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-	monkit "gopkg.in/spacemonkeygo/monkit.v2"
-)
-
-var (
-	mon = monkit.Package()
 )
 
 // DB stores bandwidth agreements.

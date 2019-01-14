@@ -25,11 +25,21 @@ import (
 	"storj.io/storj/pkg/auth"
 	"storj.io/storj/pkg/pb"
 	"storj.io/storj/pkg/storage/meta"
+	"storj.io/storj/satellite/satellitedb"
 	"storj.io/storj/storage"
 	"storj.io/storj/storage/teststore"
 )
 
 func TestServicePut(t *testing.T) {
+	// creating in-memory db and opening connection
+	satdb, err := satellitedb.NewInMemory()
+	defer func() {
+		err = satdb.Close()
+		assert.NoError(t, err)
+	}()
+	err = satdb.CreateTables()
+	assert.NoError(t, err)
+
 	for i, tt := range []struct {
 		apiKey    []byte
 		err       error
@@ -45,7 +55,7 @@ func TestServicePut(t *testing.T) {
 		errTag := fmt.Sprintf("Test case #%d", i)
 
 		db := teststore.New()
-		s := Server{DB: db, logger: zap.NewNop()}
+		s := Server{DB: db, uplinkdb: satdb.UplinkDB(), logger: zap.NewNop()}
 
 		path := "a/b/c"
 		pr := pb.Pointer{}
@@ -55,7 +65,7 @@ func TestServicePut(t *testing.T) {
 		}
 
 		req := pb.PutRequest{Path: path, Pointer: &pr}
-		_, err := s.Put(ctx, &req)
+		_, err = s.Put(ctx, &req)
 
 		if err != nil {
 			assert.EqualError(t, err, tt.errString, errTag)
@@ -78,6 +88,15 @@ func TestServiceGet(t *testing.T) {
 
 	info := credentials.TLSInfo{State: tls.ConnectionState{PeerCertificates: peerCertificates}}
 
+	// creating in-memory db and opening connection
+	satdb, err := satellitedb.NewInMemory()
+	defer func() {
+		err = satdb.Close()
+		assert.NoError(t, err)
+	}()
+	err = satdb.CreateTables()
+	assert.NoError(t, err)
+
 	for i, tt := range []struct {
 		apiKey    []byte
 		err       error
@@ -93,7 +112,7 @@ func TestServiceGet(t *testing.T) {
 		errTag := fmt.Sprintf("Test case #%d", i)
 
 		db := teststore.New()
-		s := Server{DB: db, logger: zap.NewNop(), identity: identity}
+		s := Server{DB: db, uplinkdb: satdb.UplinkDB(), logger: zap.NewNop(), identity: identity}
 
 		path := "a/b/c"
 
@@ -124,6 +143,15 @@ func TestServiceGet(t *testing.T) {
 }
 
 func TestServiceDelete(t *testing.T) {
+	// creating in-memory db and opening connection
+	satdb, err := satellitedb.NewInMemory()
+	defer func() {
+		err = satdb.Close()
+		assert.NoError(t, err)
+	}()
+	err = satdb.CreateTables()
+	assert.NoError(t, err)
+
 	for i, tt := range []struct {
 		apiKey    []byte
 		err       error
@@ -142,14 +170,14 @@ func TestServiceDelete(t *testing.T) {
 
 		db := teststore.New()
 		_ = db.Put(storage.Key(path), storage.Value("hello"))
-		s := Server{DB: db, logger: zap.NewNop()}
+		s := Server{DB: db, uplinkdb: satdb.UplinkDB(), logger: zap.NewNop()}
 
 		if tt.err != nil {
 			db.ForceError++
 		}
 
 		req := pb.DeleteRequest{Path: path}
-		_, err := s.Delete(ctx, &req)
+		_, err = s.Delete(ctx, &req)
 
 		if err != nil {
 			assert.EqualError(t, err, tt.errString, errTag)
@@ -160,8 +188,17 @@ func TestServiceDelete(t *testing.T) {
 }
 
 func TestServiceList(t *testing.T) {
+	// creating in-memory db and opening connection
+	satdb, err := satellitedb.NewInMemory()
+	defer func() {
+		err = satdb.Close()
+		assert.NoError(t, err)
+	}()
+	err = satdb.CreateTables()
+	assert.NoError(t, err)
+
 	db := teststore.New()
-	server := Server{DB: db, logger: zap.NewNop()}
+	server := Server{DB: db, uplinkdb: satdb.UplinkDB(), logger: zap.NewNop()}
 
 	pointer := &pb.Pointer{}
 	pointer.CreationDate = ptypes.TimestampNow()

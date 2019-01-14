@@ -6,8 +6,6 @@ package satellitedbtest
 // This package should be referenced only in test files!
 
 import (
-	"flag"
-	"os"
 	"testing"
 
 	"storj.io/storj/satellite"
@@ -21,7 +19,7 @@ const (
 )
 
 var (
-	testPostgres = flag.String("postgres-test-db", os.Getenv("STORJ_POSTGRES_TEST"), "PostgreSQL test database connection string")
+	testPostgres = "postgres://postgres@localhost/teststorj?sslmode=disable"
 )
 
 // Run method will iterate over all supported databases. Will establish
@@ -33,7 +31,7 @@ func Run(t *testing.T, test func(t *testing.T, db satellite.DB)) {
 		dbMessage string
 	}{
 		{"Sqlite", defaultSqliteConn, ""},
-		{"Postgres", *testPostgres, "Postgres flag missing, example: -postgres-test-db=" + defaultPostgresConn},
+		{"Postgres", testPostgres, "Postgres flag missing, example: -postgres-test-db=" + defaultPostgresConn},
 	} {
 		t.Run(dbInfo.dbName, func(t *testing.T) {
 			if dbInfo.dbURL == "" {

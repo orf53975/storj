@@ -34,7 +34,16 @@ var ctx = context.Background()
 
 func TestIdentifyInjuredSegments(t *testing.T) {
 	logger := zap.NewNop()
-	pointerdb := pointerdb.NewServer(teststore.New(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
+	// creating in-memory db and opening connection
+	db, err := satellitedb.NewInMemory()
+	assert.NoError(t, err)
+	defer func() {
+		err = db.Close()
+		assert.NoError(t, err)
+	}()
+	err = db.CreateTables()
+	assert.NoError(t, err)
+	pointerdb := pointerdb.NewServer(teststore.New(), db.UplinkDB(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
 	assert.NotNil(t, pointerdb)
 
 	repairQueue := queue.NewQueue(testqueue.New())
@@ -90,15 +99,6 @@ func TestIdentifyInjuredSegments(t *testing.T) {
 	overlayServer := mocks.NewOverlay(nodes)
 	limit := 0
 	interval := time.Second
-	// creating in-memory db and opening connection
-	db, err := satellitedb.NewInMemory()
-	assert.NoError(t, err)
-	defer func() {
-		err = db.Close()
-		assert.NoError(t, err)
-	}()
-	err = db.CreateTables()
-	assert.NoError(t, err)
 	checker := newChecker(pointerdb, db.StatDB(), repairQueue, overlayServer, db.Irreparable(), limit, logger, interval)
 	assert.NoError(t, err)
 	err = checker.identifyInjuredSegments(ctx)
@@ -121,7 +121,16 @@ func TestIdentifyInjuredSegments(t *testing.T) {
 
 func TestOfflineNodes(t *testing.T) {
 	logger := zap.NewNop()
-	pointerdb := pointerdb.NewServer(teststore.New(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
+	// creating in-memory db and opening connection
+	db, err := satellitedb.NewInMemory()
+	assert.NoError(t, err)
+	defer func() {
+		err = db.Close()
+		assert.NoError(t, err)
+	}()
+	err = db.CreateTables()
+	assert.NoError(t, err)
+	pointerdb := pointerdb.NewServer(teststore.New(), db.UplinkDB(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
 	assert.NotNil(t, pointerdb)
 
 	repairQueue := queue.NewQueue(testqueue.New())
@@ -143,15 +152,6 @@ func TestOfflineNodes(t *testing.T) {
 	overlayServer := mocks.NewOverlay(nodes)
 	limit := 0
 	interval := time.Second
-	// creating in-memory db and opening connection
-	db, err := satellitedb.NewInMemory()
-	assert.NoError(t, err)
-	defer func() {
-		err = db.Close()
-		assert.NoError(t, err)
-	}()
-	err = db.CreateTables()
-	assert.NoError(t, err)
 	checker := newChecker(pointerdb, db.StatDB(), repairQueue, overlayServer, db.Irreparable(), limit, logger, interval)
 	assert.NoError(t, err)
 	offline, err := checker.offlineNodes(ctx, nodeIDs)
@@ -161,9 +161,6 @@ func TestOfflineNodes(t *testing.T) {
 
 func BenchmarkIdentifyInjuredSegments(b *testing.B) {
 	logger := zap.NewNop()
-	pointerdb := pointerdb.NewServer(teststore.New(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
-	assert.NotNil(b, pointerdb)
-
 	// creating in-memory db and opening connection
 	db, err := satellitedb.NewInMemory()
 	defer func() {
@@ -172,6 +169,8 @@ func BenchmarkIdentifyInjuredSegments(b *testing.B) {
 	}()
 	err = db.CreateTables()
 	assert.NoError(b, err)
+	pointerdb := pointerdb.NewServer(teststore.New(), db.UplinkDB(), &overlay.Cache{}, logger, pointerdb.Config{}, nil)
+	assert.NotNil(b, pointerdb)
 
 	addr, cleanup, err := redisserver.Start()
 	defer cleanup()

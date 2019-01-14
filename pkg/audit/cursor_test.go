@@ -23,6 +23,7 @@ import (
 	"storj.io/storj/pkg/pointerdb"
 	"storj.io/storj/pkg/storage/meta"
 	"storj.io/storj/pkg/storj"
+	"storj.io/storj/satellite/satellitedb"
 	"storj.io/storj/storage/teststore"
 )
 
@@ -95,12 +96,21 @@ func TestAuditSegment(t *testing.T) {
 	ctx = auth.WithAPIKey(ctx, nil)
 
 	// PointerDB instantiation
-	db := teststore.New()
+	kvdb := teststore.New()
 	c := pointerdb.Config{MaxInlineSegmentSize: 8000}
+
+	// creating in-memory db and opening connection
+	db, err := satellitedb.NewInMemory()
+	defer func() {
+		err = db.Close()
+		assert.NoError(t, err)
+	}()
+	err = db.CreateTables()
+	assert.NoError(t, err)
 
 	cache := overlay.NewCache(teststore.New(), nil)
 
-	pointers := pointerdb.NewServer(db, cache, zap.NewNop(), c, identity)
+	pointers := pointerdb.NewServer(kvdb, db.UplinkDB(), cache, zap.NewNop(), c, identity)
 
 	// create a pdb client and instance of audit
 	cursor := NewCursor(pointers)
